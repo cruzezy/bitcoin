@@ -7,7 +7,7 @@
 # Test ZMQ interface
 #
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import NetgoldTestFramework
 from test_framework.util import *
 import zmq
 import binascii
@@ -21,9 +21,9 @@ try:
 except ImportError:
     import urlparse
 
-class ZMQTest (BitcoinTestFramework):
+class ZMQTest (NetgoldTestFramework):
 
-    port = 28332
+    port = 28992
 
     def setup_nodes(self):
         self.zmqContext = zmq.Context()

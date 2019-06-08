@@ -3,8 +3,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef BITCOIN_PRIMITIVES_TRANSACTION_H
-#define BITCOIN_PRIMITIVES_TRANSACTION_H
+#ifndef NETGOLD_PRIMITIVES_TRANSACTION_H
+#define NETGOLD_PRIMITIVES_TRANSACTION_H
 
 #include "amount.h"
 #include "script/script.h"
@@ -282,4 +282,4 @@ struct CMutableTransaction
     uint256 GetHash() const;
 };
 
-#endif // BITCOIN_PRIMITIVES_TRANSACTION_H
+#endif // NETGOLD_PRIMITIVES_TRANSACTION_H

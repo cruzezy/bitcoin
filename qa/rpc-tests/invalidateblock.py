@@ -7,10 +7,10 @@
 # Test InvalidateBlock code
 #
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import NetgoldTestFramework
 from test_framework.util import *
 
-class InvalidateTest(BitcoinTestFramework):
+class InvalidateTest(NetgoldTestFramework):
     
         
     def setup_chain(self):

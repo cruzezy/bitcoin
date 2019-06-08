@@ -46,7 +46,7 @@
 using namespace std;
 
 #if defined(NDEBUG)
-# error "Bitcoin cannot be compiled without assertions."
+# error "Netgold cannot be compiled without assertions."
 #endif
 
 /**
@@ -100,7 +100,7 @@ static void CheckBlockIndex(const Consensus::Params& consensusParams);
 /** Constant stuff for coinbase transactions we create: */
 CScript COINBASE_FLAGS;
 
-const string strMessageMagic = "Bitcoin Signed Message:\n";
+const string strMessageMagic = "Netgold Signed Message:\n";
 
 // Internal stuff
 namespace {
@@ -1196,7 +1196,7 @@ bool AcceptToMemoryPoolWorker(CTxMemPool& pool, CValidationState &state, const C
         // Remove conflicting transactions from the mempool
         BOOST_FOREACH(const CTxMemPool::txiter it, allConflicting)
         {
-            LogPrint("mempool", "replacing tx %s with %s for %s BTC additional fees, %d delta bytes\n",
+            LogPrint("mempool", "replacing tx %s with %s for %s NTG additional fees, %d delta bytes\n",
                     it->GetTx().GetHash().ToString(),
                     hash.ToString(),
                     FormatMoney(nModifiedFees - nConflictingFees),
@@ -1887,7 +1887,7 @@ bool FindUndoPos(CValidationState &state, int nFile, CDiskBlockPos &pos, unsigne
 static CCheckQueue<CScriptCheck> scriptcheckqueue(128);
 
 void ThreadScriptCheck() {
-    RenameThread("bitcoin-scriptch");
+    RenameThread("netgold-scriptch");
     scriptcheckqueue.Thread();
 }
 
@@ -3678,6 +3678,40 @@ bool InitBlockIndex(const CChainParams& chainparams)
     if (!fReindex) {
         try {
             CBlock &block = const_cast<CBlock&>(chainparams.GenesisBlock());
+//临时添加的创始块代码开始
+            arith_uint256 nProofOfWorkLimit = UintToArith256(uint256S("00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
+            arith_uint256 bnTarget;
+            bool fNegative;
+            bool fOverflow;
+            uint256 hashGenesisBlock;
+            block.nBits = 0x1d00ffff;
+            bnTarget.SetCompact(block.nBits, &fNegative, &fOverflow);
+            LogPrintf("ProofOfWorkLimit %s\n", nProofOfWorkLimit.ToString());
+            LogPrintf("Target  is %s\n", bnTarget.ToString());
+            if (fNegative || bnTarget == 0 || fOverflow || bnTarget > nProofOfWorkLimit) {
+            error("InitBlockIndex CheckProofOfWork() : nBits below minimum work");
+            }else {
+
+            LogPrintf("bnTarget %s\n", bnTarget.ToString());
+            block.nNonce = 0;
+            while (true) {
+             if (block.nNonce== 0)
+             {
+            	 block.nTime = GetTime();//1231006505;
+            	 LogPrintf("block.nTime %d\n", block.nTime);
+             }
+            if (block.nNonce%1000000000 == 0)
+            LogPrintf("block.nNonce--- %d\n", block.nNonce);
+            hashGenesisBlock = block.GetHash();
+            if (UintToArith256(hashGenesisBlock) <= bnTarget)
+            break;
+            block.nNonce++;
+            }
+            LogPrintf("block.nNonce******** %d\n", block.nNonce);
+            LogPrintf("hashGenesisBlock******** %s\n", hashGenesisBlock.ToString());
+            LogPrintf("hashMerkleRoot******** %s\n", block.hashMerkleRoot.ToString());
+            }
+//临时添加的创始块代码结束
             // Start new block file
             unsigned int nBlockSize = ::GetSerializeSize(block, SER_DISK, CLIENT_VERSION);
             CDiskBlockPos blockPos;

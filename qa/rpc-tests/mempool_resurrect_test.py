@@ -8,11 +8,11 @@
 # the blockchain is re-organized.
 #
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import NetgoldTestFramework
 from test_framework.util import *
 
 # Create one-input, one-output, no-fee transaction:
-class MempoolCoinbaseTest(BitcoinTestFramework):
+class MempoolCoinbaseTest(NetgoldTestFramework):
 
     def setup_network(self):
         # Just need one node for this test
